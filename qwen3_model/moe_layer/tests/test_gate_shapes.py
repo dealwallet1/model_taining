@@ -1,5 +1,5 @@
 import torch
-from ..gating import TopKGate
+from gating import TopKGate
 
 def test_gate_topk_shapes():
     S, C, E, K = 32, 64, 4, 2

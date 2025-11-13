@@ -1,5 +1,5 @@
 import torch
-from ..moe import MoE
+from moe import MoE
 
 def test_moe_forward_dims_and_grad():
     print("*************inside the moe layer**************")
