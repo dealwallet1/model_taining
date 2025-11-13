@@ -1,30 +1,10 @@
-from model_config import ModelConfig
 import torch
-import torch.nn as nn  # Neural network modules like Linear, Embedding, etc.
-import torch.nn.functional as F  # Functional interface for operations like cross_entropy, silu, etc.
-from torch.utils.data import Dataset, DataLoader  # Base class and utilities for loading datasets
-from torch.cuda.amp import autocast, GradScaler  # 🔄 Automatic Mixed Precision (AMP) tools for faster/lower-memory training
-
-import numpy as np  # Numerical computing library, used for random seeding and general array ops
-
-from datasets import load_dataset  # 🧁 Hugging Face Datasets library for streaming large datasets
-from tqdm import tqdm  # ⏳ Progress bar visualization library, great for loops
-
-import time  # ⌛ Timing utilities, measuring time
-from transformers import AutoTokenizer  # 🤗 Load pretrained tokenizers from HuggingFace with one line
-
-from dataclasses import dataclass  # 🧱 Define simple classes for configs with less boilerplate
-from typing import List, Optional  # ✍️ Type hints for better readability and tooling
-
-import warnings  # ⚠️ Suppress or handle warnings
-import os  # 🗂️ File system operations (creating folders, path checking, etc.)
-import pickle
-
-from dataset import TextTokenDataset
-from trainin_model import train_model
-from utilities import load_and_cache_data, set_seed  # 💾 Python object serialization (used to save/load preprocessed datasets)
-
-warnings.filterwarnings('ignore') 
+from utils.random_seed import set_seed
+from configuration.model_config import ModelConfig
+from data.loading_data import load_and_cache_data,TextTokenDataset
+from torch.utils.data import DataLoader
+import time
+from core.training_loop import train_model
 
 if __name__ == "__main__":
     # Check system
@@ -54,10 +34,8 @@ if __name__ == "__main__":
         dataset, [train_size, val_size], generator=torch.Generator().manual_seed(42)
     )
 
-    train_loader = DataLoader(train_dataset, batch_size=config.batch_size, shuffle=True, num_workers=0)
-    val_loader = DataLoader(val_dataset, batch_size=config.batch_size, shuffle=False, num_workers=0)
-    
-    
+    train_loader = DataLoader(train_dataset, batch_size=config.batch_size, shuffle=True, num_workers=2)
+    val_loader = DataLoader(val_dataset, batch_size=config.batch_size, shuffle=False, num_workers=2)
 
     print(f"📊 Dataset: {len(train_dataset)} train, {len(val_dataset)} val samples")
 

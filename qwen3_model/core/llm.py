@@ -1,11 +1,8 @@
-import math
-from model_config import ModelConfig
+import torch.nn as nn 
+from configuration.model_config import ModelConfig
+from .transformer import TransformerBlock
 import torch
-
-import torch.nn as nn
-
-from transformer import TransformerBlock 
-
+import math
 
 class MinimalLLM(nn.Module):
     def __init__(self, config: ModelConfig):
@@ -41,13 +38,13 @@ class MinimalLLM(nn.Module):
     def forward(self, x):
         x = self.token_embedding(x) * math.sqrt(self.config.d_model)
         x = self.position_dropout(x)
-
+        total_aux_loss = 0
         for block in self.transformer_blocks:
-            x = block(x)
+            x, aux_loss = block(x)
+            total_aux_loss += aux_loss
 
         x = self.norm(x)
         x = self.output_dropout(x)
         logits = self.lm_head(x)
-        return logits
-
+        return logits, total_aux_loss
 

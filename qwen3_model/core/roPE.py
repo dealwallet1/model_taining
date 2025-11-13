@@ -3,6 +3,7 @@ import torch.nn as nn
 
 
 class Rotary(nn.Module):
+  #as per the sample here we will get the 46,512
     def __init__(self, dim: int, max_seq_len: int):
         super().__init__()
         angular_freq = (1 / 10000) ** torch.linspace(0, 1, steps=dim//4, dtype=torch.float32)

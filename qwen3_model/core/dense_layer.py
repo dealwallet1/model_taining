@@ -1,5 +1,6 @@
 import torch.nn as nn 
-import torch.nn.functional as F 
+import torch.nn.functional as F
+
 
 class SwiGLUFeedForward(nn.Module):
     def __init__(self, d_model: int, d_ff: int, dropout: float = 0.1):
@@ -10,7 +11,6 @@ class SwiGLUFeedForward(nn.Module):
         self.dropout = nn.Dropout(dropout)
 
     def forward(self, x):
-        # Implementation of the SwiGLU activation function
-        # F.silu is the Swish activation function
         activated_x = F.silu(self.gate_proj(x)) * self.up_proj(x)
+        #here we are first going for dropout,that matrix is passed through the down_projection
         return self.down_proj(self.dropout(activated_x))
