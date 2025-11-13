@@ -15,7 +15,6 @@ def main():
  
     config = ModelConfig()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
     # Load a tiny HF slice or fallback examples
     items = load_tiny_hf(split='train[:24]', sample_dataset=False)
 
