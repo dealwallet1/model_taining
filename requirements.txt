@@ -3,3 +3,4 @@ numpy==2.3.4
 transformers==4.57.1
 datasets==4.4.1
 pytest==9.0.1
+tokenizer==3.5.4
